@@ -59,7 +59,7 @@
 
     <ciManagement>
         <system>Hudson</system>
-        <url>https://grid.sonatype.org/ci/job/Polyglot_Maven</url>
+        <url>https://grid.sonatype.org/ci/job/Polyglot-Maven</url>
     </ciManagement>
 
     <issueManagement>
