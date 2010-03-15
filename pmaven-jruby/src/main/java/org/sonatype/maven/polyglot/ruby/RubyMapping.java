@@ -22,13 +22,14 @@ import org.sonatype.maven.polyglot.mapping.MappingSupport;
 
 /**
  * Ruby model mapping.
- * 
+ *
  * @author Kristian Meier
- * 
  * @since 0.8
  */
 @Component(role = Mapping.class, hint = "ruby")
-public class RubyMapping extends MappingSupport {
+public class RubyMapping
+    extends MappingSupport
+{
     public RubyMapping() {
         super("ruby");
         setPomNames("pom.rb");

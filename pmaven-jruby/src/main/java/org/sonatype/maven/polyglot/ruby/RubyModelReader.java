@@ -16,57 +16,50 @@
 
 package org.sonatype.maven.polyglot.ruby;
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.ModelReader;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
+import org.codehaus.plexus.util.IOUtil;
+import org.jruby.embed.ScriptingContainer;
+import org.sonatype.maven.polyglot.io.ModelReaderSupport;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Map;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.ModelParseException;
-import org.apache.maven.model.io.ModelReader;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.util.IOUtil;
-import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.LocalVariableBehavior;
-import org.jruby.embed.ScriptingContainer;
-import org.sonatype.maven.polyglot.io.ModelReaderSupport;
+import static org.jruby.embed.LocalContextScope.*;
+import static org.jruby.embed.LocalVariableBehavior.*;
 
 /**
  * Ruby model reader.
- * 
+ *
  * @author mkristian
- * 
  * @since 0.8
  */
 @Component(role = ModelReader.class, hint = "ruby")
-public class RubyModelReader extends ModelReaderSupport {
-
+public class RubyModelReader
+    extends ModelReaderSupport
+{
     @Requirement(hint = "default")
-    ModelReader        xmlReader;
+    private ModelReader xmlReader;
 
-    ScriptingContainer scriptingContainer;
+    private ScriptingContainer scriptingContainer;
 
-    Object             pomReader;
+    private Object pomReader;
 
     public RubyModelReader() {
-        this.scriptingContainer = new ScriptingContainer(LocalContextScope.SINGLETON,
-                LocalVariableBehavior.PERSISTENT);
-
-        this.pomReader = this.scriptingContainer.runScriptlet(getClass().getResourceAsStream("pom_reader.rb"),
-                                                              "pom_reader.rb");
+        this.scriptingContainer = new ScriptingContainer(SINGLETON, PERSISTENT);
+        this.pomReader = this.scriptingContainer.runScriptlet(getClass().getResourceAsStream("pom_reader.rb"), "pom_reader.rb");
     }
 
-    public Model read(final Reader input, final Map<String, ?> options)
-            throws IOException, ModelParseException {
-        if (input == null) {
-            throw new IllegalArgumentException("Ruby Reader is null.");
-        }
-        final String pomSource = IOUtil.toString(input);
-        final String pomXml = this.scriptingContainer.callMethod(this.pomReader,
-                                                                 "read",
-                                                                 pomSource,
-                                                                 String.class);
-        return this.xmlReader.read(new StringReader(pomXml), options);
+    public Model read(final Reader input, final Map<String, ?> options) throws IOException {
+        assert input != null;
+
+        String pomSource = IOUtil.toString(input);
+        String pomXml = scriptingContainer.callMethod(this.pomReader, "read", pomSource, String.class);
+
+        return xmlReader.read(new StringReader(pomXml), options);
     }
 }

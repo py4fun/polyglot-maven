@@ -16,11 +16,11 @@
 
 package org.sonatype.maven.polyglot.ruby;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Map;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.DefaultModelWriter;
+import org.apache.maven.model.io.ModelWriter;
+import org.codehaus.plexus.component.annotations.Component;
+import org.sonatype.maven.polyglot.io.ModelWriterSupport;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -30,47 +30,46 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.DefaultModelWriter;
-import org.apache.maven.model.io.ModelWriter;
-import org.codehaus.plexus.component.annotations.Component;
-import org.sonatype.maven.polyglot.io.ModelWriterSupport;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Map;
 
 /**
  * Ruby model writer.
- * 
+ *
  * @author mkristian
- * 
  * @since 0.8
  */
 @Component(role = ModelWriter.class, hint = "ruby")
-public class RubyModelWriter extends ModelWriterSupport {
-
-    final Templates xslt;
+public class RubyModelWriter
+    extends ModelWriterSupport
+{
+    private final Templates xslt;
 
     public RubyModelWriter() throws TransformerConfigurationException {
         // create an instance of TransformerFactory
-        final TransformerFactory transFact = TransformerFactory.newInstance();
-        final Source xsltSource = new StreamSource(getClass().getResourceAsStream("pom2ruby.xsl"));
-
-        this.xslt = transFact.newTemplates(xsltSource);
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Source source = new StreamSource(getClass().getResourceAsStream("pom2ruby.xsl"));
+        this.xslt = factory.newTemplates(source);
     }
 
-    public void write(final Writer output, final Map<String, Object> options,
-            final Model model) throws IOException {
+    public void write(final Writer output, final Map<String, Object> options, final Model model) throws IOException {
+        assert output != null;
+        assert model != null;
 
-        final DefaultModelWriter writer = new DefaultModelWriter();
-        final StringWriter pom = new StringWriter();
+        DefaultModelWriter writer = new DefaultModelWriter();
+        StringWriter pom = new StringWriter();
         writer.write(pom, options, model);
-        final Source xmlSource = new StreamSource(new StringReader(pom.toString()));
-        final Result result = new StreamResult(output);
+        Source xmlSource = new StreamSource(new StringReader(pom.toString()));
+        Result result = new StreamResult(output);
 
         try {
-            this.xslt.newTransformer().transform(xmlSource, result);
+            xslt.newTransformer().transform(xmlSource, result);
         }
-        catch (final TransformerException e) {
-            throw new IOException("error producing the ruby code from xml", e);
+        catch (TransformerException e) {
+            throw (IOException)new IOException("Error producing ruby code from xml").initCause(e);
         }
     }
 }
