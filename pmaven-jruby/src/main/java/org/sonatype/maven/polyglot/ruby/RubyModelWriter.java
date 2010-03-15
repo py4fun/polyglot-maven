@@ -63,7 +63,6 @@ public class RubyModelWriter extends ModelWriterSupport {
         final DefaultModelWriter writer = new DefaultModelWriter();
         final StringWriter pom = new StringWriter();
         writer.write(pom, options, model);
-        System.err.println(pom.toString());
         final Source xmlSource = new StreamSource(new StringReader(pom.toString()));
         final Result result = new StreamResult(output);
 
