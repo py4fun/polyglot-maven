@@ -9,8 +9,7 @@
 package org.sonatype.maven.polyglot.commands;
 
 import org.junit.Test;
-import org.sonatype.gshell.commands.CommandTestSupport;
-import org.sonatype.maven.polyglot.commands.TranslateCommand;
+import org.sonatype.gshell.command.support.CommandTestSupport;
 
 import static org.junit.Assert.fail;
 

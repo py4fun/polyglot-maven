@@ -10,8 +10,7 @@ package org.sonatype.maven.polyglot.commands;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonatype.gshell.commands.CommandTestSupport;
-import org.sonatype.maven.polyglot.commands.PMavenCommand;
+import org.sonatype.gshell.command.support.CommandTestSupport;
 
 import java.net.URL;
 
@@ -23,10 +22,10 @@ import static org.junit.Assert.assertNotNull;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  */
 @Ignore // FIXME: Ignore for now
-public class MavenCommandTest
+public class PMavenCommandTest
     extends CommandTestSupport
 {
-    public MavenCommandTest() {
+    public PMavenCommandTest() {
         super(PMavenCommand.class);
     }
 

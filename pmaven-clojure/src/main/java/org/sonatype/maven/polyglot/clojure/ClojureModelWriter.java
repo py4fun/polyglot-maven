@@ -16,7 +16,7 @@
 
 package org.sonatype.maven.polyglot.clojure;
 
-import com.google.common.base.Join;
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.maven.model.Build;
@@ -182,7 +182,7 @@ public class ClojureModelWriter extends ModelWriterSupport {
                     }
 
                     if (execution.getGoals() != null && !execution.getGoals().isEmpty()) {
-                        out.printLnAtCurrent(":goals [\"" + Join.join("\" \"", execution.getGoals()) + "\"]");
+                        out.printLnAtCurrent(":goals [\"" + Joiner.on("\" \"").join("\" \"", execution.getGoals()) + "\"]");
                     }
 
                     out.append("}");
@@ -378,7 +378,7 @@ public class ClojureModelWriter extends ModelWriterSupport {
 
     private void writeModules(List<String> modules, ClojurePrintWriter out) {
         if (modules != null && !modules.isEmpty()) {
-            out.printLnAtCurrent(":modules [\"" + Join.join("\" \"", modules) + "\"]");
+            out.printLnAtCurrent(":modules [\"" + Joiner.on("\" \"").join(modules) + "\"]");
         }
     }
 
