@@ -59,7 +59,7 @@
 
     <ciManagement>
         <system>Hudson</system>
-        <url>https://grid.sonatype.org/ci/job/Polyglot_Maven</url>
+        <url>https://grid.sonatype.org/ci/job/Polyglot-Maven</url>
     </ciManagement>
 
     <issueManagement>
@@ -81,7 +81,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mavenVersion>3.0-alpha-6</mavenVersion>
+        <mavenVersion>3.0-alpha-7</mavenVersion>
         <forgeSiteId>forge-sites</forgeSiteId>
         <forgeSiteUrl>dav:http://repository.sonatype.org/content/sites/forge-sites/${project.artifactId}/${project.version}</forgeSiteUrl>
     </properties>
@@ -147,14 +147,14 @@
             <dependency>
                 <groupId>org.sonatype.maven.shell</groupId>
                 <artifactId>mvnsh-maven</artifactId>
-                <version>0.9</version>
+                <version>0.10</version>
             </dependency>
 
             <dependency>
                 <groupId>org.sonatype.gshell</groupId>
                 <artifactId>gshell-core</artifactId>
                 <classifier>tests</classifier>
-                <version>2.4</version>
+                <version>2.5</version>
             </dependency>
             
             <!-- INTERNAL -->

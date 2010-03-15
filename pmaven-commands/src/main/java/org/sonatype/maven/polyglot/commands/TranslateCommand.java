@@ -10,9 +10,9 @@ package org.sonatype.maven.polyglot.commands;
 
 import com.google.inject.Inject;
 import org.sonatype.gshell.command.Command;
-import org.sonatype.gshell.command.CommandActionSupport;
 import org.sonatype.gshell.command.CommandContext;
 import org.sonatype.gshell.command.IO;
+import org.sonatype.gshell.command.support.CommandActionSupport;
 import org.sonatype.gshell.console.completer.FileNameCompleter;
 import org.sonatype.gshell.plexus.PlexusRuntime;
 import org.sonatype.gshell.util.FileAssert;
@@ -22,7 +22,7 @@ import org.sonatype.maven.polyglot.PolyglotModelTranslator;
 import java.io.File;
 
 /**
- * Translate Maven pom file formats..
+ * Translate Maven pom file formats.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 0.9
@@ -60,7 +60,7 @@ public class TranslateCommand
 
         new FileAssert(source).exists().isReadable();
 
-        io.info("Translating: {} -> {}", source, target); // TODO: i18n
+        io.println("Translating: {} -> {}", source, target); // TODO: i18n
 
         translator.translate(source, target);
 

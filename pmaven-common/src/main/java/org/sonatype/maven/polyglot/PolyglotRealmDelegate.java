@@ -17,6 +17,7 @@
 package org.sonatype.maven.polyglot;
 
 import org.apache.maven.classrealm.ClassRealmManagerDelegate;
+import org.apache.maven.classrealm.ClassRealmRequest;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.component.annotations.Component;
 
@@ -31,7 +32,7 @@ import org.codehaus.plexus.component.annotations.Component;
 public class PolyglotRealmDelegate
     implements ClassRealmManagerDelegate
 {
-    public void setupRealm(final ClassRealm realm) {
+    public void setupRealm(final ClassRealm realm, final ClassRealmRequest request) {
         assert realm != null;
         realm.importFromParent("org.sonatype.maven.polyglot.execute");
     }

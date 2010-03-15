@@ -7,10 +7,10 @@ project {
     }
     groupId 'org.sonatype.pmaven'
     artifactId 'pmaven'
-    version '0.7-SNAPSHOT'
+    version '0.8-SNAPSHOT'
     packaging 'pom'
     name 'Polyglot Maven'
-    url 'https://docs.sonatype.org/display/PMAVEN'
+    url 'http://polyglot.sonatype.org/'
     licenses {
         license {
             name 'The Apache Software License, Version 2.0'
@@ -18,21 +18,197 @@ project {
             distribution 'repo'
         }
     }
+    developers {
+        developer {
+            id 'jdillon'
+            name 'Jason Dillon'
+            email 'jason@planet57.com'
+            roles {
+                role 'Build Master'
+                role 'Developer'
+            }
+        }
+    }
+    mailingLists {
+        mailingList {
+            name 'Development'
+            subscribe 'polyglot-subscribe@maven.org'
+            post 'polyglot@maven.org'
+        }
+    }
+    modules {
+        module 'pmaven-common'
+        module 'pmaven-maven-plugin'
+        module 'pmaven-groovy'
+        module 'pmaven-yaml'
+        module 'pmaven-clojure'
+        module 'pmaven-jruby'
+        module 'pmaven-scala'
+        module 'pmaven-cli'
+        module 'pmaven-commands'
+    }
     scm {
         connection 'scm:git:git://github.com/sonatype/polyglot-maven.git'
         developerConnection 'scm:git:ssh://git@github.com/sonatype/polyglot-maven.git'
-        url 'https://github.com/sonatype/polyglot-maven'
+        url 'http://github.com/sonatype/polyglot-maven'
     }
     issueManagement {
         system 'JIRA'
         url 'https://issues.sonatype.org/browse/PMAVEN'
     }
+    ciManagement {
+        system 'Hudson'
+        url 'https://grid.sonatype.org/ci/job/Polyglot-Maven'
+    }
+    distributionManagement {
+        site {
+            id '${forgeSiteId}'
+            url '${forgeSiteUrl}'
+        }
+    }
+    properties {
+        forgeSiteId 'forge-sites'
+        mavenVersion '3.0-alpha-7'
+        'project.build.sourceEncoding' 'UTF-8'
+        forgeSiteUrl 'dav:http://repository.sonatype.org/content/sites/forge-sites/${project.artifactId}/${project.version}'
+    }
+    dependencyManagement {
+        dependencies {
+            dependency {
+                groupId 'org.apache.maven'
+                artifactId 'apache-maven'
+                version '${mavenVersion}'
+                type 'zip'
+                classifier 'bin'
+            }
+            dependency {
+                groupId 'org.apache.maven'
+                artifactId 'maven-model-builder'
+                version '${mavenVersion}'
+            }
+            dependency {
+                groupId 'org.apache.maven'
+                artifactId 'maven-embedder'
+                version '${mavenVersion}'
+            }
+            dependency {
+                groupId 'org.apache.maven'
+                artifactId 'maven-plugin-api'
+                version '${mavenVersion}'
+            }
+            dependency {
+                groupId 'org.codehaus.groovy'
+                artifactId 'groovy'
+                version '1.7.0'
+                exclusions {
+                    exclusion {
+                        artifactId 'jline'
+                        groupId 'jline'
+                    }
+                    exclusion {
+                        artifactId 'junit'
+                        groupId 'junit'
+                    }
+                    exclusion {
+                        artifactId 'ant'
+                        groupId 'org.apache.ant'
+                    }
+                    exclusion {
+                        artifactId 'ant-launcher'
+                        groupId 'org.apache.ant'
+                    }
+                }
+            }
+            dependency {
+                groupId 'com.google.inject'
+                artifactId 'guice'
+                version '2.0'
+            }
+            dependency {
+                groupId 'org.sonatype.maven.shell'
+                artifactId 'mvnsh-maven'
+                version '0.10'
+            }
+            dependency {
+                groupId 'org.sonatype.gshell'
+                artifactId 'gshell-core'
+                version '2.5'
+                classifier 'tests'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-common'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-cli'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-maven-plugin'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-groovy'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-yaml'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-jruby'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-commands'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-clojure'
+                version '0.8-SNAPSHOT'
+            }
+            dependency {
+                groupId 'org.sonatype.pmaven'
+                artifactId 'pmaven-scala'
+                version '0.8-SNAPSHOT'
+            }
+        }
+    }
+    dependencies {
+        dependency {
+            groupId 'junit'
+            artifactId 'junit'
+            version '4.7'
+            scope 'test'
+        }
+        dependency {
+            groupId 'org.codehaus.groovy'
+            artifactId 'groovy'
+            scope 'test'
+        }
+    }
     build {
         defaultGoal 'install'
+        pluginManagement {
+            plugins {
+                plugin {
+                    artifactId 'maven-site-plugin'
+                    version '2.1'
+                }
+            }
+        }
         plugins {
             plugin {
                 artifactId 'maven-surefire-plugin'
-                version '2.4.3'
+                version '2.5'
                 configuration {
                     redirectTestOutputToFile 'true'
                     forkMode 'once'
@@ -103,134 +279,24 @@ project {
             }
         }
     }
-    modules {
-        module 'pmaven-common'
-        module 'pmaven-maven-plugin'
-        module 'pmaven-groovy'
-        module 'pmaven-yaml'
-        module 'pmaven-clojure'
-        module 'pmaven-scala'
-        module 'pmaven-cli'
-    }
-    properties {
-        mavenVersion '3.0-alpha-6'
-        'project.build.sourceEncoding' 'UTF-8'
-    }
-    dependencyManagement {
-        dependencies {
-            dependency {
-                groupId 'org.apache.maven'
-                artifactId 'apache-maven'
-                version '${mavenVersion}'
-                type 'zip'
-                classifier 'bin'
-            }
-            dependency {
-                groupId 'org.apache.maven'
-                artifactId 'maven-model-builder'
-                version '${mavenVersion}'
-            }
-            dependency {
-                groupId 'org.apache.maven'
-                artifactId 'maven-embedder'
-                version '${mavenVersion}'
-            }
-            dependency {
-                groupId 'org.apache.maven'
-                artifactId 'maven-plugin-api'
-                version '${mavenVersion}'
-            }
-            dependency {
-                groupId 'org.codehaus.groovy'
-                artifactId 'groovy'
-                version '1.7.0'
-                exclusions {
-                    exclusion {
-                        artifactId 'jline'
-                        groupId 'jline'
-                    }
-                    exclusion {
-                        artifactId 'junit'
-                        groupId 'junit'
-                    }
-                    exclusion {
-                        artifactId 'ant'
-                        groupId 'org.apache.ant'
-                    }
-                    exclusion {
-                        artifactId 'ant-launcher'
-                        groupId 'org.apache.ant'
+    reporting {
+        plugins {
+            plugin {
+                artifactId 'maven-javadoc-plugin'
+                version '2.6.1'
+                configuration {
+                    configuration {
+                        source '1.5'
+                        encoding '${project.build.sourceEncoding}'
                     }
                 }
             }
-            dependency {
-                groupId 'org.sonatype.gossip'
-                artifactId 'gossip'
-                version '1.2'
+            plugin {
+                groupId 'org.codehaus.mojo'
+                artifactId 'cobertura-maven-plugin'
+                version '2.3'
+                inherited 'false'
             }
-            dependency {
-                groupId 'com.google.inject'
-                artifactId 'guice'
-                version '2.0'
-            }
-            dependency {
-                groupId 'org.sonatype.grrrowl'
-                artifactId 'grrrowl'
-                version '1.0'
-            }
-            dependency {
-                groupId 'net.java.dev.jna'
-                artifactId 'jna'
-                version '3.2.3'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-common'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-cli'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-maven-plugin'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-groovy'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-yaml'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-clojure'
-                version '0.7-SNAPSHOT'
-            }
-            dependency {
-                groupId 'org.sonatype.pmaven'
-                artifactId 'pmaven-scala'
-                version '0.7-SNAPSHOT'
-            }
-        }
-    }
-    dependencies {
-        dependency {
-            groupId 'junit'
-            artifactId 'junit'
-            version '4.7'
-            scope 'test'
-        }
-        dependency {
-            groupId 'org.codehaus.groovy'
-            artifactId 'groovy'
-            scope 'test'
         }
     }
 }
